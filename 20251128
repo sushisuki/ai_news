@@ -1,0 +1,439 @@
+import React, { useState } from 'react';
+import { Newspaper, Cpu, Briefcase, ShieldAlert, Globe2, Zap, ExternalLink, X, Calendar, Layers, Rocket, Search, TrendingUp, BrainCircuit, Scale, Info } from 'lucide-react';
+
+// ニュースデータ定義
+const NewsData = [
+  {
+    id: '1',
+    category: 'Model',
+    title: 'Googleが「Gemini 3.0」を発表：推論能力を強化した「Deep Think」モード搭載',
+    date: '2025/11/24',
+    summary: 'Googleが次世代モデルGemini 3.0を発表。OpenAIのo1に対抗する深い推論機能と、エージェント性能が大幅に向上しました。',
+    details: [
+      'Google DeepMindは、最新のマルチモーダルモデル「Gemini 3.0」を正式に発表しました。このモデルの最大の特徴は、新しい推論モード「Deep Think」の搭載です。これはOpenAIのo1シリーズと同様に、回答を出力する前に問題の構成要素を分解し、内部で「熟考」するプロセスを経ることで、数学、コーディング、論理的推論において博士号レベルの性能を発揮するとされています。',
+      'また、Gemini 3.0は「エージェントAI」としての能力が飛躍的に向上しています。単にテキストを生成するだけでなく、ユーザーの意図や「ムード」を読み取る能力が強化されており、例えば「90年代風のレトロゲームを作って」といった抽象的な指示から、コードだけでなくデザインや雰囲気まで含めた実装を行う「Vibe Coding」機能が導入されました。',
+      'さらに、Google検索への統合も強化されており、検索結果と高度な推論を組み合わせた回答が可能になっています。今回のアップデートは、AIを単なるチャットボットから、複雑なタスクを自律的に遂行する「デジタルコラボレーター」へと進化させるGoogleの強い意志を示しています。'
+    ],
+    sources: [{ name: 'Delante', url: 'https://delante.co/gemini-3-0/' }, { name: 'Times of India', url: 'https://timesofindia.indiatimes.com/technology/tech-news/openai-ceo-sam-altman-to-employees-in-internal-memo-googles-ai-success-can-create/articleshow/125488762.cms' }],
+    importance: 'critical'
+  },
+  {
+    id: '2',
+    category: 'Model',
+    title: 'Anthropic「Claude Opus 4.5」リリース：コーディング性能で世界最高水準を記録',
+    date: '2025/11/24',
+    summary: 'Anthropicが新フラグシップモデルを発表。コーディングベンチマークで競合を圧倒し、API価格の大幅な引き下げも実施しました。',
+    details: [
+      'Anthropicは、同社の最上位モデルとなる「Claude Opus 4.5」をリリースしました。このモデルは特にコーディングとエージェントタスクにおいて卓越した性能を示しており、ソフトウェアエンジニアリングのベンチマークであるSWE-benchにおいて80.9%というスコアを記録しました。これはOpenAIやGoogleの競合モデル（70%台後半）を上回る結果であり、開発者コミュニティに衝撃を与えています。',
+      '性能向上に加え、価格戦略も攻撃的です。API利用料は入力トークンあたり5ドル（100万トークンあたり）と設定され、これは従来モデルの約3分の1という低価格です。AWS、Google Cloud、Azureの主要3大クラウドプラットフォームですぐに利用可能となっており、企業での導入が加速することが予想されます。',
+      'Opus 4.5は、未知のタスクへの対応力を測るARC-AGI-2ベンチマークでも37.6%を記録し、競合を大きく引き離しました。これにより、定型的なタスク処理だけでなく、創造的な問題解決や複雑なシステムの設計においても、人間の専門家に近い、あるいはそれ以上の能力を発揮することが期待されています。'
+    ],
+    sources: [{ name: 'MK News', url: 'https://www.mk.co.kr/en/world/11476103' }, { name: 'AIsmiley', url: 'https://aismiley.co.jp/ai_news/anthropic-claude-new/' }],
+    importance: 'critical'
+  },
+  {
+    id: '3',
+    category: 'Business',
+    title: '日本発「Sakana AI」がシリーズBで200億円調達、評価額は約4000億円に',
+    date: '2025/11/27',
+    summary: '東京を拠点とするSakana AIが大型資金調達を実施。独自の「進化的モデルマージ」技術で、効率的な国産AI開発を加速させます。',
+    details: [
+      'Google出身の研究者らによって東京で設立されたAIスタートアップ「Sakana AI」が、シリーズBラウンドで約200億円（1.3億ドル規模）の資金調達を完了しました。これにより同社の企業評価額は約4000億円に達し、日本発のユニコーン企業として世界的な注目を集めています。今回のラウンドには国内外の有力投資家が参加しています。',
+      'Sakana AIの強みは、既存の異なるAIモデルを掛け合わせて新たなモデルを自動生成する「進化的モデルマージ」という独自技術です。これにより、膨大な計算資源を必要とする従来の手法と比較して、圧倒的に低コストかつ高速に高性能なモデルを開発することが可能です。',
+      '調達した資金は、日本の計算資源やデータを活用した「ソブリンAI（主権AI）」の開発強化に充てられます。特に防衛、災害対応、金融など、機密性が高く日本特有の文脈理解が必要な分野での応用が期待されており、日本のAI自給率向上に向けた重要な一歩となります。'
+    ],
+    sources: [{ name: '創業手帳', url: 'https://sogyotecho.jp/news/20251127sakana-ai/' }, { name: 'Workstyle Evolution', url: 'https://gai.workstyle-evolution.co.jp/2025/11/26/sakana-ai-200-billion-yen-funding-sovereign-ai-japan-strategy-analysis/' }],
+    importance: 'high'
+  },
+  {
+    id: '4',
+    category: 'Business',
+    title: 'NVIDIA株価急落、MetaがGoogle TPU採用検討との報道でチップ競争が激化',
+    date: '2025/11/26',
+    summary: 'AIチップ市場の独占状態に変化の兆し。MetaがGoogle製チップの採用を検討しているとの報道を受け、市場が敏感に反応しました。',
+    details: [
+      'AIチップ市場で圧倒的なシェアを持つNVIDIAの株価が急落し、時価総額で約2500億ドルが消失しました。この背景には、NVIDIAの最大顧客の一つであるMetaが、Googleが独自開発したAIチップ「TPU（Tensor Processing Unit）」の採用を検討しているという報道があります。',
+      'GoogleのTPUはこれまで自社サービス内での利用が主でしたが、Gemini 3.0の学習にも全面的に使用されるなど、その性能とコスト効率が実証されつつあります。Metaのような巨大テック企業がNVIDIA以外の選択肢を真剣に検討し始めたことは、NVIDIAによる「1強体制」が崩れ始める転換点となる可能性があります。',
+      'これに対しNVIDIAは公式声明を発表し、「我々の技術は業界の一世代先を行っている」と反論しました。しかし、Google (Alphabet) の株価はこのニュースを受けて上昇しており、AIインフラ市場におけるプラットフォーマー間の競争は、単なるソフトウェア開発からハードウェアの覇権争いへと深化しています。'
+    ],
+    sources: [{ name: 'Times of India', url: 'https://timesofindia.indiatimes.com/technology/tech-news/nvidia-publicly-responds-to-losing-250-billion-to-google-deal-declares-we-are/articleshow/125580817.cms' }, { name: 'Indian Express', url: 'https://indianexpress.com/article/explained/explained-sci-tech/nvidia-ai-chip-google-10387194/' }],
+    importance: 'high'
+  },
+  {
+    id: '5',
+    category: 'Model',
+    title: 'SB Intuitionsが日本語視覚言語モデル「Sarashina2.2-Vision-3B」を公開',
+    date: '2025/11/25',
+    summary: 'ソフトバンク子会社が、日本の文化や地理に精通した小規模かつ高性能なVLMをMITライセンスで公開しました。',
+    details: [
+      'ソフトバンクの子会社SB Intuitionsは、新しい大規模視覚言語モデル（VLM）である「Sarashina2.2-Vision-3B」を公開しました。このモデルは30億パラメータという比較的軽量なサイズでありながら、同サイズ帯の日本語ベンチマークにおいてトップクラスの性能を達成しています。',
+      '最大の特徴は、日本語圏のデータで重点的に学習されている点です。例えば、日本の観光地や特有の文化財（例：かずら橋）の画像を正確に認識・解説したり、日本語を含む複雑なレイアウトの文書やポスターを読み取ったりする能力に優れています。これにより、海外製モデルでは捉えきれない日本独自の文脈に対応可能です。',
+      'モデルはMITライセンスで公開されており、商用利用や改変が自由に行えます。リソースの限られたエッジデバイスやオンプレミス環境でも動作させやすいため、日本国内の企業や自治体でのDX推進や、独自の画像認識アプリケーション開発への活用が期待されます。'
+    ],
+    sources: [{ name: 'ITmedia', url: 'https://www.itmedia.co.jp/aiplus/articles/2511/25/news116.html' }, { name: 'SB Intuitions Blog', url: 'https://www.sbintuitions.co.jp/blog/entry/2025/11/25/100000' }],
+    importance: 'high'
+  },
+  {
+    id: '6',
+    category: 'Tech',
+    title: 'ハーバード大、希少疾患診断AI「popEVE」を発表：ゲノム変異のリスクを予測',
+    date: '2025/11/24',
+    summary: '遺伝子変異の疾患リスクをスコア化する新AIモデルが登場。希少疾患の診断スピード向上に期待がかかります。',
+    details: [
+      'ハーバード大学医学部（HMS）とブロード研究所の研究チームは、希少疾患の診断を加速させるための新しいAIモデル「popEVE」を発表し、Nature Genetics誌に論文を掲載しました。このモデルは、患者のゲノムに見られる特定の変異が病気を引き起こす可能性を予測・スコア化します。',
+      'popEVEは、進化生物学的な情報と、タンパク質言語モデル、そしてヒトの集団遺伝データを組み合わせて学習されています。これにより、これまで意味不明とされていた遺伝子変異（VUS）が良性か病原性かを高精度に判別できるようになり、診断がつかずに苦しむ「未診断疾患」の患者への福音となると期待されています。',
+      '研究チームは現在、臨床現場でのテストを進めており、診断の迅速化だけでなく、新たな創薬ターゲットの発見にも役立つ可能性があるとしています。AIが純粋なデジタル領域を超え、生物学や医療の最先端課題解決に貢献する象徴的な事例です。'
+    ],
+    sources: [{ name: 'Harvard Medical School', url: 'https://hms.harvard.edu/news/new-artificial-intelligence-model-could-speed-rare-disease-diagnosis' }, { name: 'Broad Institute', url: 'https://www.broadinstitute.org/news/new-ai-model-could-speed-rare-disease-diagnosis' }],
+    importance: 'high'
+  },
+  {
+    id: '7',
+    category: 'Business',
+    title: 'Warner MusicがStability AIと戦略的提携：音楽生成AIの権利保護と活用へ',
+    date: '2025/11/26',
+    summary: '音楽大手ワーナーが生成AI企業との対立から協調へ転換。アーティストの権利を守りつつ、新しい創作ツールを開発します。',
+    details: [
+      'Warner Music Group (WMG) は、画像・動画生成AIで知られるStability AI、および音楽生成AIのUdioとの間でライセンス契約および戦略的提携を結んだことを相次いで発表しました。これまで音楽業界はAIによる著作権侵害を強く懸念し、訴訟も辞さない構えでしたが、この提携は歴史的な転換点となります。',
+      '提携の目的は、WMG所属のアーティストの楽曲やデータを正当な対価と許諾のもとでAIモデルの学習に活用し、同時にアーティスト自身が使える新しい創作ツールを共同開発することにあります。これにより、「責任あるAI音楽エコシステム」の構築を目指します。',
+      'Stability AIにとっても、音楽分野への本格進出において、権利クリアな高品質データを確保できることは大きなメリットです。この動きは、他のメディア企業やAI開発者に対しても、法的な対立ではなくライセンス契約による共存共栄のモデルケースを示すものとなります。'
+    ],
+    sources: [{ name: 'Musicman', url: 'https://www.musicman.co.jp/business/702723' }, { name: 'note (Analysis)', url: 'https://note.com/taku_sid/n/ne8a29b5f814a' }],
+    importance: 'medium'
+  },
+  {
+    id: '8',
+    category: 'Service',
+    title: 'OpenAI「GPT-5.1 Pro」のリリースと機能強化が話題に',
+    date: '2025/11/21',
+    summary: 'OpenAIが最新モデルGPT-5.1 Proをリリースしたとの情報。複雑なタスク処理能力と応答の自然さが向上しています。',
+    details: [
+      '複数の業界レポートやツールベンダーの発表によると、OpenAIは11月中旬から下旬にかけて最新モデル「GPT-5.1」およびその上位版「GPT-5.1 Pro」をリリースしました。これはGPT-5のマイナーアップデートにあたりますが、実務能力は大きく向上しているとされています。',
+      '特にPro版では「適応的推論（Adaptive Reasoning）」機能が強化されており、ユーザーの質問の複雑さに応じて思考の深さを自動調整します。また、指示追従性も改善されており、ビジネス文書の作成や特定のフォーマットでの出力において、より正確な結果が得られるようになりました。',
+      '既に「Answer IO」などのサードパーティツールがGPT-5.1への対応を発表しており、Gemini 3.0やClaude Opus 4.5との激しい性能競争が繰り広げられています。AIモデルの進化サイクルは依然として高速で、数ヶ月単位で業界標準が更新される状況が続いています。'
+    ],
+    sources: [{ name: 'OpenAI Academy', url: 'https://academy.openai.com/public/resources/intro-gpt-5-1' }, { name: 'note (Analysis)', url: 'https://note.com/ai__worker/n/nd6d6102b3792' }],
+    importance: 'high'
+  },
+  {
+    id: '9',
+    category: 'Policy',
+    title: '世界銀行が「デジタル進歩とトレンド報告書2025」を発表：AI格差への警鐘',
+    date: '2025/11/25',
+    summary: '世銀がAIの影響に関する年次報告書を公開。高所得国への利益集中と、途上国におけるリスクについて分析しています。',
+    details: [
+      '世界銀行は最新のレポート「Digital Progress and Trends Report 2025」を発表し、AI技術が世界経済に与える影響と課題を包括的に分析しました。報告書では、AIが生産性向上や新産業創出の鍵となる一方で、国家間の経済格差を拡大させるリスクがあると指摘しています。',
+      '特に懸念されているのは、AI開発と利益が米国や中国などの一部の高所得国に集中している現状です。途上国ではインフラやスキル不足によりAIの恩恵を受けにくいだけでなく、単純労働の自動化によって雇用が失われる「早期の脱専門化（premature de-professionalization）」のリスクがあると警告しています。',
+      'レポートは、各国政府に対し、AIインフラへの投資だけでなく、教育システムの改革や適切な規制フレームワークの構築を提言しています。AIの果実を公平に分配し、グローバルな分断を防ぐための国際協力の必要性が強調されています。'
+    ],
+    sources: [{ name: 'World Bank', url: 'https://openknowledge.worldbank.org/bitstreams/86903114-6212-4c45-9011-938925cc61d1/download' }],
+    importance: 'medium'
+  },
+  {
+    id: '10',
+    category: 'Model',
+    title: 'Stability AI、マルチアングル映像生成モデル「Stable Video 4D」を発表',
+    date: '2025/11/21',
+    summary: '単一の動画から複数の視点映像を生成する新技術。3Dコンテンツ制作やVR/AR分野への応用が期待されます。',
+    details: [
+      '画像生成AIで知られるStability AIは、新たな映像生成モデル「Stable Video 4D」を発表しました。この技術は、入力された1つの動画クリップから、それを異なる角度（マルチアングル）から見た映像を生成することができます。',
+      '従来の3D生成技術は静止画からの立体化が主でしたが、このモデルは「動画の時間的変化」と「空間的な立体構造」を同時に処理する点で画期的です。これにより、ダイナミックに動く被写体を自由な視点から観察する映像を作成可能になります。',
+      'この技術は、ゲーム開発、映画制作、VR/ARコンテンツの作成プロセスを劇的に効率化する可能性があります。限られた映像素材からリッチな3D体験を作り出せるため、クリエイターにとって強力なツールとなると予想されます。'
+    ],
+    sources: [{ name: 'Ledge.ai', url: 'https://ledge.ai/search?q=Stable%20Diffusion' }],
+    importance: 'medium'
+  },
+  {
+    id: '11',
+    category: 'Business',
+    title: '数学特化AIの「Harmonic」が1.2億ドル調達、ハルシネーション「ゼロ」を目指す',
+    date: '2025/11/25',
+    summary: '金融や工学向けの数学推論AIを開発するHarmonicがシリーズC調達。信頼性が最優先される分野での需要が高まっています。',
+    details: [
+      '数学的推論能力に特化したAIモデルを開発するスタートアップHarmonicが、シリーズCラウンドで1.2億ドル（約180億円）を調達しました。同社の主力モデル「Aristotle」は、一般的なLLMが苦手とする厳密な数学的処理において高い性能を誇ります。',
+      'Harmonicのアプローチは、AI特有の嘘や間違い（ハルシネーション）を許容できない産業分野、例えば金融トレーディング、航空宇宙工学、ハードウェア設計などに特化しています。確率的な回答ではなく、検証可能な論理に基づく回答を生成することを目指しています。',
+      '今回の大型調達は、汎用的なチャットボットだけでなく、特定の専門領域で人間を超える精度を持つ「特化型AI」への投資家の関心が高いことを示しています。高信頼性AI市場の拡大を予感させるニュースです。'
+    ],
+    sources: [{ name: 'SiliconANGLE', url: 'https://note.com/yasuhitoo/n/n1e81c3bf1dd8' }],
+    importance: 'medium'
+  },
+  {
+    id: '12',
+    category: 'Business',
+    title: 'Mark Cuban氏、AI企業への過剰投資と「バブル崩壊」のリスクを警告',
+    date: '2025/11/26',
+    summary: '著名投資家が現在のAIブームをドットコムバブルと比較。インフラへの巨額投資が回収できない可能性を指摘しました。',
+    details: [
+      '著名な投資家であり実業家のMark Cuban氏は、現在のAI業界における投資競争について「過剰支出（Overspending）」であると警告を発しました。彼は現在の状況を1990年代の検索エンジンブームやドットコムバブルと比較し、多くの企業が消え去る可能性を示唆しています。',
+      '特に懸念されているのは、巨大なデータセンターやGPUクラスターへの数千億ドル規模の設備投資です。Cuban氏は、今後10年で技術が進化すれば現在の高価なインフラが陳腐化する可能性があり、現在の支出ペースに見合うリターンが得られる企業はごく一部（勝者総取り）になると分析しています。',
+      'この発言は、NVIDIAやOpenAI、Googleなどが繰り広げる「軍拡競争」に対する市場の不安を代弁するものとして注目されています。技術革新の裏で、持続可能なビジネスモデルが問われるフェーズに入りつつあります。'
+    ],
+    sources: [{ name: 'Times of India', url: 'https://timesofindia.indiatimes.com/technology/tech-news/mark-cuban-to-perplexity-openai-anthropic-google-microsoft-you-are-overspending-on-ai-only-one-you-will-/articleshow/125591144.cms' }],
+    importance: 'medium'
+  },
+  {
+    id: '13',
+    category: 'Service',
+    title: '松尾研発スタートアップSpark+、音声AIエージェントで電話業務を完全自動化へ',
+    date: '2025/11/26',
+    summary: '東京大学松尾研発のSpark+が、トヨタカローラ香川と共同で、人間同等の応対が可能な電話予約システムを開発しました。',
+    details: [
+      '東京大学松尾研究室発のAIスタートアップである株式会社Spark+は、トヨタカローラ香川グループと共同で、店舗の電話業務を自動化するAIエージェントシステムを開発しました。これは人手不足に悩む地方企業の課題解決に向けた具体的な実装事例です。',
+      '開発されたシステム「VoiceGPT」は、従来の自動音声応答（IVR）とは異なり、生成AIを活用して自然な会話で顧客の用件を聞き取り、車検や点検の予約、問い合わせ対応を完結させることができます。人間と同等のレベルでの応対を目指して調整されています。',
+      'このような「Vertical AI（特定業界向けAI）」の導入は、日本の労働人口減少に対する切り札として注目されています。大手テック企業の汎用モデルを、現場の具体的課題に合わせてチューニングし社会実装する動きが加速しています。'
+    ],
+    sources: [{ name: 'PR TIMES', url: 'https://prtimes.jp/topics/keywords/%E6%9D%BE%E5%B0%BE%E7%A0%94%E7%99%BA%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88%E3%82%A2%E3%83%83%E3%83%97' }],
+    importance: 'low'
+  },
+  {
+    id: '14',
+    category: 'Policy',
+    title: '米国・EUのAI規制動向：トランプ次期政権による州規制無効化の懸念浮上',
+    date: '2025/11/24',
+    summary: '米国で州ごとの厳格なAI規制を連邦レベルで無効化する動きが報じられ、OpenAIなどのビッグテックとの関連が議論されています。',
+    details: [
+      '米国では、カリフォルニア州などで検討されている厳格なAI安全規制に対し、トランプ次期政権が大統領令を用いてこれらを無効化し、より緩やかな連邦基準に統一しようとしているとの報道がありました。これには、イノベーションを阻害したくないテック業界からのロビー活動が影響していると見られています。',
+      '一方、欧州では「EU AI Act」に基づく包括的な規制の運用が始まっており、リスクベースのアプローチが定着しつつあります。大西洋を挟んで規制の方針が大きく異なる「分断」が生じる可能性があります。',
+      'この動きは、AIの安全性（Safety）を優先するか、開発速度と競争力（Acceleration）を優先するかという、世界的な議論の縮図です。今後の米国の政策変更は、日本のAI規制議論にも大きな影響を与えると予想されます。'
+    ],
+    sources: [{ name: 'Innovatopia', url: 'https://innovatopia.jp/tech-social/tech-social-news/72451/' }],
+    importance: 'medium'
+  },
+  {
+    id: '15',
+    category: 'Service',
+    title: '就活支援AIが進化、企業URLから志望動機を自動生成する新機能',
+    date: '2025/11/25',
+    summary: 'ジェイックの就活AIサービスに、企業のWebサイトを解析してパーソナライズされた志望動機を作成する機能が追加されました。',
+    details: [
+      '就職支援サービスのジェイックが提供するAIツールに、新機能「URL読み取り機能」が追加されました。これは、ユーザーが応募したい企業のWebサイトのURLを入力するだけで、AIがその企業の特徴や理念を解析し、ユーザーの経歴とマッチさせた志望動機を生成するものです。',
+      'これまでも汎用的な志望動機生成ツールはありましたが、特定の企業情報（最新のプレスリリースや社長メッセージなど）をリアルタイムに反映できる点が特徴です。これにより、就活生は企業研究の手間を大幅に削減しつつ、質の高いエントリーシートを作成可能になります。',
+      '教育や採用の現場ではAI利用の是非が議論されていますが、ツール側は利便性を追求して進化を続けています。AIを活用できる学生とそうでない学生の格差、あるいはAIを見破る採用側のAI活用など、いたちごっこの様相も呈しています。'
+    ],
+    sources: [{ name: 'サードニュース', url: 'https://news.3rd-in.co.jp/article/46bb0f4a-c998-11f0-94d2-9ca3ba083d71' }],
+    importance: 'low'
+  }
+];
+
+// キーポイント定義
+const KeyPoints = [
+  { label: 'モデル革新', text: 'Gemini 3.0 & Claude Opus 4.5 発表', icon: Rocket, color: 'text-rose-500' },
+  { label: '国内市場', text: 'Sakana AI 200億円調達', icon: TrendingUp, color: 'text-emerald-500' },
+  { label: 'インフラ', text: 'NVIDIA vs Google チップ競争', icon: Cpu, color: 'text-blue-500' },
+  { label: '権利保護', text: 'Warner MusicとStability AI提携', icon: Scale, color: 'text-purple-500' },
+];
+
+// カテゴリ定義
+const Categories = {
+  All: { label: 'すべて', icon: Layers, color: 'bg-gray-100 text-gray-700', border: 'border-gray-200' },
+  Model: { label: 'モデル発表', icon: Rocket, color: 'bg-rose-100 text-rose-700', border: 'border-rose-200', text: 'text-rose-700' },
+  Service: { label: '新サービス', icon: Zap, color: 'bg-amber-100 text-amber-700', border: 'border-amber-200', text: 'text-amber-700' },
+  Tech: { label: '技術・研究', icon: Cpu, color: 'bg-blue-100 text-blue-700', border: 'border-blue-200', text: 'text-blue-700' },
+  Business: { label: 'ビジネス', icon: Briefcase, color: 'bg-emerald-100 text-emerald-700', border: 'border-emerald-200', text: 'text-emerald-700' },
+  Ethics: { label: '社会・倫理', icon: Scale, color: 'bg-purple-100 text-purple-700', border: 'border-purple-200', text: 'text-purple-700' },
+  Policy: { label: '国際・政策', icon: Globe2, color: 'bg-indigo-100 text-indigo-700', border: 'border-indigo-200', text: 'text-indigo-700' }
+};
+
+export default function AIInfoGraphic() {
+  const [selectedNews, setSelectedNews] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const filteredNews = activeCategory === 'All'
+    ? NewsData
+    : NewsData.filter(news => news.category === activeCategory);
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
+      {/* Header & KeyPoints (Ticker) */}
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-3">
+                <BrainCircuit className="h-8 w-8 text-blue-400" />
+                AI Industry News
+              </h1>
+              <p className="text-slate-400 text-sm mt-1 flex items-center gap-2">
+                <Calendar className="h-4 w-4" /> 2025/11/21 - 2025/11/28 Weekly Report
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
+               <span className="text-xs font-medium text-slate-300 uppercase tracking-wider block mb-1">Total News</span>
+               <span className="text-2xl font-bold">{NewsData.length}</span>
+               <span className="text-xs text-slate-300 ml-1">topics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-8 -mt-8 relative z-10">
+        {/* Key Points Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+           {KeyPoints.map((point, idx) => {
+             const Icon = point.icon;
+             return (
+               <div key={idx} className="bg-white/95 backdrop-blur rounded-xl p-4 shadow-md border border-slate-200 flex items-center gap-3 hover:shadow-lg transition-shadow">
+                 <div className={`p-2.5 rounded-lg bg-slate-50 ${point.color} bg-opacity-10`}>
+                   <Icon className={`h-6 w-6 ${point.color}`} />
+                 </div>
+                 <div>
+                   <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">{point.label}</div>
+                   <div className="text-sm font-bold text-slate-900 leading-tight mt-0.5">{point.text}</div>
+                 </div>
+               </div>
+             );
+           })}
+        </div>
+
+        {/* Filter Chips */}
+        <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
+           <span className="text-xs font-bold text-slate-400 mr-2 uppercase tracking-wider hidden md:block">Filter by:</span>
+           {Object.entries(Categories).map(([key, config]) => {
+             const isActive = activeCategory === key;
+             const Icon = config.icon;
+             return (
+               <button
+                 key={key}
+                 onClick={() => setActiveCategory(key)}
+                 className={`
+                   flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200
+                   ${isActive 
+                     ? `${config.color} ring-2 ring-offset-1 ${config.border.replace('border-', 'ring-')} shadow-sm` 
+                     : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200 hover:border-slate-300'}
+                 `}
+               >
+                 <Icon className={`h-4 w-4 ${isActive ? 'opacity-100' : 'opacity-60'}`} />
+                 {config.label}
+               </button>
+             );
+           })}
+        </div>
+
+        {/* Main News Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredNews.map((news) => {
+            const catConfig = Categories[news.category];
+            const isCritical = news.importance === 'critical';
+            return (
+              <div
+                key={news.id}
+                onClick={() => setSelectedNews(news)}
+                className={`
+                  group relative bg-white rounded-2xl p-6 cursor-pointer
+                  border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
+                  flex flex-col h-full
+                  ${isCritical ? 'border-amber-400 ring-1 ring-amber-100 shadow-amber-100' : 'border-slate-200 hover:border-slate-300'}
+                `}
+              >
+                {isCritical && (
+                    <div className="absolute -top-3 -right-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
+                        <Zap className="h-3 w-3 fill-current" /> CRITICAL
+                    </div>
+                )}
+                
+                <div className="flex justify-between items-start mb-4">
+                  <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${catConfig.color} bg-opacity-15 border border-transparent`}>
+                    {catConfig.label}
+                  </span>
+                  <span className="text-slate-400 text-xs font-mono bg-slate-50 px-2 py-1 rounded">{news.date}</span>
+                </div>
+                
+                <h3 className="text-lg font-bold text-slate-800 mb-3 leading-snug group-hover:text-blue-600 transition-colors">
+                  {news.title}
+                </h3>
+                
+                <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow line-clamp-4">
+                  {news.summary}
+                </p>
+                
+                <div className="flex items-center text-blue-600 text-sm font-bold mt-auto group-hover:translate-x-1 transition-transform">
+                  Read Analysis <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Modal Overlay */}
+      {selectedNews && (() => {
+        const catConfig = Categories[selectedNews.category];
+        const CategoryIcon = catConfig.icon;
+
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setSelectedNews(null)}
+          >
+            <div
+              className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-200"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className={`p-6 md:p-8 border-b ${catConfig.color.replace('text-', 'bg-').replace('bg-', 'bg-opacity-10 ')}`}>
+                 <div className="flex justify-between items-start mb-4">
+                   <div className="flex items-center gap-2">
+                     <span className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 bg-white/80 backdrop-blur-sm shadow-sm ${catConfig.text}`}>
+                       <CategoryIcon className="h-3.5 w-3.5" />
+                       {Categories[selectedNews.category].label}
+                     </span>
+                     <span className="text-slate-500 text-sm font-mono flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {selectedNews.date}
+                     </span>
+                   </div>
+                   <button
+                     onClick={() => setSelectedNews(null)}
+                     className="p-1.5 rounded-full hover:bg-black/5 transition-colors -mr-2 -mt-2"
+                   >
+                     <X className="h-6 w-6 text-slate-500" />
+                   </button>
+                 </div>
+                 
+                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
+                   {selectedNews.title}
+                 </h2>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar bg-white">
+                  <div className="prose prose-slate max-w-none">
+                    <div className="space-y-6 text-base leading-7 text-slate-700">
+                        {selectedNews.details.map((paragraph, idx) => (
+                          <p key={idx} className="first:first-letter:text-3xl first:first-letter:font-bold first:first-letter:mr-1 first:first-letter:float-left">
+                            {paragraph}
+                          </p>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Sources Link Section */}
+                  <div className="border-t border-slate-100 pt-6 mt-8">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Search className="h-3 w-3" /> Source & References
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedNews.sources.map((source, i) => (
+                        <a
+                          key={i}
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-slate-100 hover:text-blue-600 border border-slate-200 hover:border-blue-200 rounded-lg text-sm font-medium text-slate-600 transition-all duration-200 group"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Globe2 className="h-4 w-4 text-slate-400 group-hover:text-blue-500" />
+                          {source.name}
+                          <ExternalLink className="h-3 w-3 opacity-30 group-hover:opacity-100" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
